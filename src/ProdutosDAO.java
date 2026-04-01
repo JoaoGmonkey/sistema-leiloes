@@ -41,10 +41,32 @@ public void cadastrarProduto(ProdutosDTO produto){
     }
 }
     
-    public ArrayList<ProdutosDTO> listarProdutos(){
-        
-        return listagem;
+public ArrayList<ProdutosDTO> listarProdutos(){
+    String sql = "SELECT * FROM produtos";
+
+    conn = new conectaDAO().connectDB();
+
+    try {
+        prep = conn.prepareStatement(sql);
+        resultset = prep.executeQuery();
+
+        while(resultset.next()){
+            ProdutosDTO obj = new ProdutosDTO();
+
+            obj.setId(resultset.getInt("id"));
+            obj.setNome(resultset.getString("nome"));
+            obj.setValor(resultset.getInt("valor"));
+            obj.setStatus(resultset.getString("status"));
+
+            listagem.add(obj);
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Erro ao listar: " + e.getMessage());
     }
+
+    return listagem;
+}
     
     
     
