@@ -1,95 +1,109 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author Adm
- */
-
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-
 public class ProdutosDAO {
     
     Connection conn;
     PreparedStatement prep;
     ResultSet resultset;
-    ArrayList<ProdutosDTO> listagem = new ArrayList<>();
-    
-public void cadastrarProduto(ProdutosDTO produto){
-    String sql = "INSERT INTO produtos (nome, valor, status) VALUES (?, ?, ?)";
 
-    conn = new conectaDAO().connectDB();
+    // 🔥 CADASTRAR PRODUTO
+    public void cadastrarProduto(ProdutosDTO produto){
+        String sql = "INSERT INTO produtos (nome, valor, status) VALUES (?, ?, ?)";
 
-    try {
-        prep = conn.prepareStatement(sql);
-        prep.setString(1, produto.getNome());
-        prep.setInt(2, produto.getValor());
-        prep.setString(3, produto.getStatus());
+        conn = new conectaDAO().connectDB();
 
-        prep.execute();
-        JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
+        try {
+            prep = conn.prepareStatement(sql);
+            prep.setString(1, produto.getNome());
+            prep.setInt(2, produto.getValor());
+            prep.setString(3, produto.getStatus());
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + e.getMessage());
-    }
-}
+            prep.execute();
+            JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
 
-    
-public ArrayList<ProdutosDTO> listarProdutos(){
-    String sql = "SELECT * FROM produtos";
-
-    conn = new conectaDAO().connectDB();
-
-    try {
-        prep = conn.prepareStatement(sql);
-        resultset = prep.executeQuery();
-
-        while(resultset.next()){
-            ProdutosDTO obj = new ProdutosDTO();
-
-            obj.setId(resultset.getInt("id"));
-            obj.setNome(resultset.getString("nome"));
-            obj.setValor(resultset.getInt("valor"));
-            obj.setStatus(resultset.getString("status"));
-
-            listagem.add(obj);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + e.getMessage());
         }
-        
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Erro ao listar: " + e.getMessage());
     }
-    
 
-    return listagem;
-}
-public void venderProduto(int id) {
-    String sql = "UPDATE produtos SET status = 'Vendido' WHERE id = ?";
+    // 🔥 LISTAR TODOS PRODUTOS (CORRIGIDO)
+    public ArrayList<ProdutosDTO> listarProdutos(){
+        ArrayList<ProdutosDTO> listagem = new ArrayList<>();
 
-    conn = new conectaDAO().connectDB();
+        String sql = "SELECT * FROM produtos";
+        conn = new conectaDAO().connectDB();
 
-    try {
-        prep = conn.prepareStatement(sql);
-        prep.setInt(1, id);
+        try {
+            prep = conn.prepareStatement(sql);
+            resultset = prep.executeQuery();
 
-        prep.executeUpdate();
+            while(resultset.next()){
+                ProdutosDTO obj = new ProdutosDTO();
 
-        JOptionPane.showMessageDialog(null, "Produto vendido com sucesso!");
+                obj.setId(resultset.getInt("id"));
+                obj.setNome(resultset.getString("nome"));
+                obj.setValor(resultset.getInt("valor"));
+                obj.setStatus(resultset.getString("status"));
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Erro ao vender: " + e.getMessage());
+                listagem.add(obj);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao listar: " + e.getMessage());
+        }
+
+        return listagem;
+    }
+
+    // 🔥 VENDER PRODUTO
+    public void venderProduto(int id) {
+        String sql = "UPDATE produtos SET status = 'Vendido' WHERE id = ?";
+
+        conn = new conectaDAO().connectDB();
+
+        try {
+            prep = conn.prepareStatement(sql);
+            prep.setInt(1, id);
+
+            prep.executeUpdate();
+
+            JOptionPane.showMessageDialog(null, "Produto vendido com sucesso!");
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao vender: " + e.getMessage());
+        }
+    }
+
+    // 🔥 LISTAR PRODUTOS VENDIDOS
+    public ArrayList<ProdutosDTO> listarProdutosVendidos(){
+        ArrayList<ProdutosDTO> listagem = new ArrayList<>();
+
+        String sql = "SELECT * FROM produtos WHERE status = 'Vendido'";
+        conn = new conectaDAO().connectDB();
+
+        try {
+            prep = conn.prepareStatement(sql);
+            resultset = prep.executeQuery();
+
+            while(resultset.next()){
+                ProdutosDTO obj = new ProdutosDTO();
+
+                obj.setId(resultset.getInt("id"));
+                obj.setNome(resultset.getString("nome"));
+                obj.setValor(resultset.getInt("valor"));
+                obj.setStatus(resultset.getString("status"));
+
+                listagem.add(obj);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao listar vendidos: " + e.getMessage());
+        }
+
+        return listagem;
     }
 }
-    
-    
-    
-        // teste git
-}
-
