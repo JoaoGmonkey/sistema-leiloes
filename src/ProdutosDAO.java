@@ -40,6 +40,7 @@ public void cadastrarProduto(ProdutosDTO produto){
         JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + e.getMessage());
     }
 }
+
     
 public ArrayList<ProdutosDTO> listarProdutos(){
     String sql = "SELECT * FROM produtos";
@@ -60,10 +61,12 @@ public ArrayList<ProdutosDTO> listarProdutos(){
 
             listagem.add(obj);
         }
+        
 
     } catch (Exception e) {
         JOptionPane.showMessageDialog(null, "Erro ao listar: " + e.getMessage());
     }
+    
 
     return listagem;
 }
